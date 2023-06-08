@@ -30,7 +30,7 @@ export default function InfiniteScroll() {
       ]
       let index = 0;
       for (let i = 0; i < 3; i++) {
-        for(let j=0; j < 10; j++){
+        for(let j = 0; j < 10; j++){
           newFreshState[i].push(imgReceived[index])
           index++;
         }
@@ -44,12 +44,30 @@ export default function InfiniteScroll() {
 
   useEffect(() => {
     infinitefetchData();
-  }, [])
+  }, [pageIndex])
  
   const handelSearch = e => {
     e.preventDefault()
   }
   const inpref = useRef();
+
+  useEffect(() => {
+
+    window.addEventListener('scroll', infiniteCheck);
+    return () => {
+      window.removeEventListener('scroll', infiniteCheck)
+    }
+
+  }, [])
+  
+  const infiniteCheck = () => {
+    console.log('hello check');
+    const {scrollTop, scrollHeight, clientHeight} = document.documentElement;
+    if (scrollHeight - scrollTop === clientHeight) {
+      console.log('bottom');
+      setpageIndex(pageIndex => pageIndex + 1)
+    }
+  }
 
   return (
     <div className = "container">
